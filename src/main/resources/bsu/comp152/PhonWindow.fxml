@@ -3,13 +3,15 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bsu.comp152.PhoneNumber">
-   <children>
-      <HBox prefHeight="400.0" prefWidth="600.0">
-         <children>
-            <ListView prefHeight="200.0" prefWidth="200.0" />
-            <TextArea prefHeight="200.0" prefWidth="200.0" />
-         </children>
-      </HBox>
-   </children>
+<AnchorPane prefHeight="100.0" prefWidth="438.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bsu.comp152.PhoneNumber">
+    <children>
+        <BorderPane layoutX="8.0" prefHeight="150.0" prefWidth="430.0">
+         <right>
+            <ListView fx:id="DataList" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+         </right>
+         <left>
+            <Button mnemonicParsing="false" onAction="#loadData" prefHeight="101.0" prefWidth="218.0" text="Enter Country" BorderPane.alignment="CENTER" />
+         </left>
+        </BorderPane>
+    </children>
 </AnchorPane>

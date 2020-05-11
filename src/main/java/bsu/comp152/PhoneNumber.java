@@ -1,57 +1,57 @@
 package bsu.comp152;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
-
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.net.URI;
+import javafx.scene.control.TextInputDialog;
 import java.net.URL;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class PhoneNumber implements Initializable {
-    @FXML
-    private TextArea DataDisplay;
+
     @FXML
     private ListView DataList;
-    @Override
-    public void initialize (URL location, ResourceBundle resources) {
-        loadData();
+
+    public void loadData() {
+        var phoneLoc = "http://country.io/phone.json";
+        var nameLoc =  "http://country.io/names.json";
+
+        var country = getCountry();
+
+        var phoneModel = new PhoneModel(phoneLoc);
+        var phoneData = phoneModel.getData();
+
+        var nameModel = new PhoneModel(nameLoc);
+        var nameData = nameModel.getData();
+
+        ArrayList<String> info = new ArrayList<>();
+
+        for (HashMap.Entry<String, String> entry : nameData.entrySet()){
+            if (entry.getValue().equals(country)){
+                info.add(entry.getKey());
+                info.add(entry.getValue());
+                info.add(phoneData.get(entry.getKey()));
+            }
+        }
+
+        var observableData = FXCollections.observableArrayList(info);
+        DataList.setItems(observableData);
     }
 
-    private void loadData() {
-        var loc = "http://country.io/phone.json";
-        var requestBuilder = HttpRequest.newBuilder();
-        var dataGrabber = HttpClient.newHttpClient();
-        var dataRequest = requestBuilder.uri(URI.create(loc)).build();
-        HttpResponse<String> response = null;
-        try {
-            response=dataGrabber.send(dataRequest, HttpResponse.BodyHandlers.ofString());
-        }catch(IOException e){
-            System.out.println("Error connecting to network or site"); }
-        catch (InterruptedException e){
-            System.out.println("Connection to site broken"); }
-        if (response == null ){
-            System.out.println("Something went terribly wrong, ending program");
-            System.exit(-1);
-        }
-        var usefulData = response.body();
-        Type type = new TypeToken<Map<String, String>>(){}.getType();
-        var gson = new Gson();
-        Map<String, String> myMap = gson.fromJson(usefulData,type); //one string to another string
-        var dataAsList = new ArrayList<String>(myMap.keySet());
-        ObservableList<String> currencyType = FXCollections.observableList(dataAsList);
-        DataList.setItems(currencyType);
+    private String getCountry(){
+        TextInputDialog answer = new TextInputDialog("United States");
+        answer.setHeaderText("Gathering Information");
+        answer.setContentText("What country do you want to look up?");
+        Optional<String> result = answer.showAndWait();
+        if (result.isPresent())
+            return result.get();
+        else
+            return "";
+    }
+
+    @Override
+    public void initialize (URL location, ResourceBundle resources) {
+
     }
 }

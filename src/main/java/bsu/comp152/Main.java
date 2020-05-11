@@ -39,19 +39,20 @@ public class Main extends Application {
 
     @FXML
     public void openPhonWindow(ActionEvent event){
-        Parent root = null;
+        Parent phoneRoot = null;
         var loc = getClass().getResource("PhonWindow.fxml");
         try {
-            root = FXMLLoader.load(loc);
+            phoneRoot = FXMLLoader.load(loc);
         }catch (IOException e){
             System.out.println("FXML file not found");
+            System.out.println(e);
+            System.exit(-1);
         }
-        //here is where we are creating the new window
-        Scene windowContents = new Scene(root, 900,400);
-        Stage recipeWindow = new Stage();
-        recipeWindow.setScene(windowContents);
-        recipeWindow.setTitle("Recipe Finder Demo");
-        recipeWindow.show();
+        Scene windowContents = new Scene(phoneRoot, 430,150);
+        Stage PhoneWindow = new Stage();
+        PhoneWindow.setScene(windowContents);
+        PhoneWindow.setTitle("International Phone Number");
+        PhoneWindow.show();
     }
 }
 
